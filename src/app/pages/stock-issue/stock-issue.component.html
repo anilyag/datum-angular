@@ -1,0 +1,121 @@
+<div class="mt-2 p-2 text-white  rounded" style="background-color: steelblue;">
+    <h3 class="text-end">Stock Issue</h3>
+</div>
+<div class="row">
+    <div class="col-3">
+        <table class="table table-bordered mt-3 text-center" style="margin-left: 10px;">
+            <thead>
+                <tr>
+                    <th style="background-color:lightblue;">Vno</th>
+                    <th style="background-color: lightblue;">Vdate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of voucherList; track $index) {
+                    <tr (click)="onVoucherClick(item)">
+                        <td>{{item.transactionNo}}</td>
+                        <td>{{item.date | date: 'dd-MM-yyyy'}}</td>
+                    </tr>
+                }               
+            </tbody>
+        </table>
+    </div>
+    <div class="col-6">
+        <form class="row g-3 mt-2" [formGroup]="stockIssueForm">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 mx-2">Voucher No</label>
+                    <input type="text" formControlName="voucherNo" class="form-control">
+                </div>
+                <div class="text-danger">
+                    @if (stockIssueForm.controls['voucherNo'].touched &&
+                    stockIssueForm.controls['voucherNo'].errors?.['required']) {
+                    <span>Voucher no. required</span>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2">Voucher Date</label>
+                    <input type="date" formControlName="voucherDate" class="form-control">
+                </div>
+                <div class="text-danger">
+                    @if (stockIssueForm.controls['voucherDate'].touched &&
+                    stockIssueForm.controls['voucherDate'].errors?.['required']) {
+                    <span>Voucher date required</span>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 mx-2">From Branch</label>
+                    <select class="form-select" formControlName="fromBranch">
+                        <option selected disabled value="">-Select-</option>
+                        @for (item of branches$ | async; track $index) {
+                        <option value={{item.id}}>{{item.company}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 mx-2">From Warehouse</label>
+                    <select class="form-select" formControlName="fromWarehouse">
+                        <option selected disabled value="">-Select-</option>
+                        @for (item of fromWarehouses$ | async; track $index) {
+                        <option value={{item.id}}>{{item.name}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 mx-2">To Branch</label>
+                    <select class="form-select" formControlName="toBranch">
+                        <option selected disabled value="">-Select-</option>
+                        @for (item of branches$ | async; track $index) {
+                        <option value={{item.id}}>{{item.company}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2">To Warehouse</label>
+                    <select class="form-select" formControlName="toWarehouse">
+                        <option selected disabled value="">-Select-</option>
+                        @for (item of toWarehouses$|async; track $index) {
+                        <option value={{item.id}}>{{item.name}}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 mx-2">Description</label>
+                    <input type="text-area" formControlName="description" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                    <label class="form-label me-2 mx-2">Terms</label>
+                    <input type="text-area" formControlName="terms" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary mx-2" type="button"
+                (click)="onNew()">New</button>
+                <button class="btn btn-success mx-2" type="button" [disabled]="stockIssueForm.invalid"
+                    (click)="onSave()">Submit</button>
+                
+            </div>
+        </form>
+    </div>
+    <div class="col-3">
+        {{fromWarehouses$ | async | json}}
+
+    </div>
+</div>
+
